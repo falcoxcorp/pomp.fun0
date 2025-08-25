@@ -707,6 +707,40 @@ canvas{background: #ffffff !important; border-radius: 20px !important; }
   color: #000000 !important;
 }
 
+/* Custom Wallet Button Styles */
+.custom-wallet-btn {
+  position: relative;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  backdrop-filter: blur(10px);
+}
+
+.custom-wallet-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+}
+
+.custom-wallet-btn:hover::before {
+  background: linear-gradient(45deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
+}
+
+.custom-wallet-btn:disabled {
+  transform: none !important;
+  cursor: not-allowed;
+}
+
+.custom-wallet-btn:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 /* Responsive Design for Navbar */
 @media (max-width: 768px) {
   .navbar-links {
