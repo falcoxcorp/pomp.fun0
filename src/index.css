@@ -1,0 +1,384 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body{ background:#282828;}
+a{ font-size:15px !important;}
+p{ font-size:15px !important;}
+button{font-size:18px !important; text-transform: capitalize; font-weight:500 !important;}
+.rightbox input{color: #fff;}
+header{ box-shadow:none !important;}
+header button{background:#fff!important; border-radius: 7px !important; padding: 5px 15px 8px !important;}
+header .text-sm {font-size: 18px !important; font-weight: 500; padding: 0px 10px;    color: #fff !important;}
+header .active{ color:#3e69cc;}
+.bg-purple-600{background-color:#3a3a3a;}
+.text-purple-200{color: rgb(255 255 255);}
+main{background:#282828; padding:0px 70px !important;}
+footer{ background:#000;  padding: 20px 0px !important;}
+footer p{ color:#fff !important;}
+.buttonbox{box-shadow:none; background:#404040; border: none; border-radius: 10px;    height: 40px;}
+.lastbtn{padding: 10px 30px;}
+.hover\:bg-purple-300:hover {background-color:#4c4c4c !important; color: #fff !important;}
+.text-\[\#7A6EAA\] {color:#2a2a2a;}
+.text-purple-700 {color:#2a2a2a; font-weight: 600;}
+.text-purple-500{color:#2a2a2a; font-weight: 600;}
+.bg-purple-500{background-color:#c1a444;    box-shadow: 1px 2px 1px #8f782e;}
+.hover\:text-purple-500:hover{color:#c1a444 !important;}
+
+
+.cardbox .bg-gray-300 {background: radial-gradient(circle, #c3c3c3 0%, rgb(131 131 131) 71%);}
+.cardbox .text-gray-600{color:#2a2a2a;}
+.cardbox .text-purple-600{color:#c1a444!important;}
+.tname{ float:left;font-weight:700;}
+.tshort{ float:right;margin-top: 5px; margin-bottom: 0px;    color:#2a2a2a;}
+.tokenbox{ width:100%; display: inline-block;}
+
+.pagination{ margin-top:20px; margin-bottom: 40px;}
+.pagination .bg-gray-300{background-color:#cbcbcb !important;}
+.cardbox .p-4{padding: 15px 10px;}
+header button{ color:#000 !important;}
+header button div{ color:#fff !important;}
+header button svg{ color:#fff !important;}
+header{ background:#282828 !important;    border-bottom: 1px solid #343434;}
+
+.forminbox{ background:#1a1a1a; padding: 30px !important; border-radius:20px;border: 1px solid #505050;}
+.tags-selection button:hover{ background:#fff; color:#000;}
+.forminbox .text-lg {font-size: 16px; line-height: 0px;}
+.tokenform{padding-top:70px !important;padding-bottom: 70px !important;}
+
+.forminbox input {padding: 10px; margin-bottom: 16px; border: 1px solid #3e3e3e !important; background: #2c2c2c !important;margin-top: 2px;}
+.forminbox textarea{padding: 10px;    margin-bottom: 16px;    border: 1px solid #3e3e3e !important; background: #2c2c2c !important;    margin-top: 2px;}
+.forminbox select{padding: 10px;    margin-bottom: 16px;    border: 1px solid #3e3e3e !important; background: #2c2c2c !important;    margin-top: 2px;}
+.rightbox{background: #2e2e2e !important;}
+
+.forminbox textarea{border-color: #c5c5c5;background-color: #fff;}
+.forminbox select{border-color: #c5c5c5;background-color: #fff;    padding: 10px;}
+.forminbox .text-purple-900{color:#fff;    font-weight: 400;background:#424242; border:none;}
+.tags-selection button{border-color:#b7b7b7;background-color:#efefef;}
+.forminbox  .border-2 {border-width: 1px;}
+.tags-selection .text-white{background:#c1a444!important; border-color: #c1a444;}
+.formmain{background:#282828;}
+.connectbutton button{background:#c1a444!important;  border-radius: 7px !important; padding: 7px 35px 11px !important; box-shadow: 1px 4px 3px #dfdfdf !important;}
+.createrightbtn a {
+    background: #ffffff !important;
+    border-radius: 7px !important;
+    padding: 8px 34px 10px !important;
+    height: 40px;
+    line-height: 24px;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    color: #000;
+}
+.text-gold{color: rgb(255 255 255) !important;}
+.createtokenbtn{ background:#fff;    color: #000;}
+.marquee-link{color:#2a2a2a !important;}
+header .text-gray-900{color:rgb(76 76 76) !important;}
+header{padding: 0px 64px !important;}
+/* Toggle Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  border-radius: 50%;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: goldenrod;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+
+.extraoptions .col-md-6{display: inline-grid; width:48%; float:left; margin-right:14px; margin-bottom:20px;}
+.extraoptions .col-md-6 label{ padding-bottom:6px;}
+.extraoptions .col-md-4{display: inline-grid; width:31%; float:left; margin-right:18px; margin-bottom:20px;}
+.extraoptions .col-md-4 label{ padding-bottom:6px;}
+.liquiditydiv{margin-right: 0px !important; width: 33% !important;}
+.lastdiv{width:50% !important;margin-right:0px !important;}
+
+.cards {
+    flex-direction: row;
+    background:#141414;
+    border: 0;
+    box-shadow: 0 7px 7px rgba(0, 0, 0, 0.18);
+    padding: 14px;
+    border: 1px solid #404040;
+    border-radius: 10px;
+}
+.cards:hover{background:#343434 !important;}
+.cards.dark {
+  color: #fff;
+}
+.cards.card.bg-light-subtle .card-title {
+  color: dimgrey;
+}
+.marquee-container{background-color: #f3f3f3 !important;border-bottom: 1px solid #cdcdcd;}
+.price{display: inline-flex;}
+.card-title{font-size:20px;margin-bottom:18px; text-transform: capitalize;}
+
+.cards img {
+  border-radius:5px;
+  margin-right:10px;
+  margin:0 auto;
+  
+}
+.progress{ height:12px;background-color: #5e5e5e;    width: 100%;    margin-bottom: 1px;}
+.hardcap{ float:right;}
+.hardcapchainimg{width: 21px; float: left;}
+.hardcap{ float:right;}
+.card-body img{border: 2px solid #000; }
+.chainlink img{ border:none !important;}
+.card-body {
+  justify-content: space-between;
+  width: 100%;
+}
+.text-section {
+  max-width: 100%;
+}
+.cta-section {
+  max-width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.cta-section .btn {
+  padding: 0.3em 0.5em;
+  /* color: #696969; */
+}
+.cards.bg-light-subtle .cta-section .btn {
+  background-color: #898989;
+  border-color: #898989;
+}
+.MCap{ float: right;    line-height: 35px;}
+.per a{ color:#ebbf2e;}
+@media screen and (max-width: 475px) {
+  .cards {
+    font-size: 0.9em;
+  }
+}
+.progress-bar{background-color: #0079e1; font-size: 9px; line-height: 15px;}
+.card-img-top{height: 173px; margin-bottom:8px !important;}
+.symble{color:#c3c3c3; font-size: 14px;}
+.card-text{margin-top:15px;height:50px; overflow: hidden;    color: #e5e5e5;}
+.cards hr{display: inline-block; width: 100%; border-top:1px dashed #464646;}
+.chainlink{ float: right; font-size: 13px;    margin-top:-1px;    margin-right: -8px;}
+.chainimg {height:21px;  margin-top: 1px;  margin-right: 3px !important;}
+
+.AdminPanel{ background: #141414;padding-top: 32px;}
+.welcome{background: #141414;}
+.AdminPanel ul{padding-left: 0px;}
+.AdminPanel ul li{ border-bottom: 1px dashed #4c4c4c;}
+.AdminPanel ul li:hover a{background: #ffffff !important;  padding-left: 10px; text-decoration: none;color: #000;}
+.gbutton{background: #c1a444 !important;}
+.hover\:bg-gray-400:hover{background-color: rgb(116 116 116) !important;}
+.Running{ background: #fff !important; padding:5px 15px; color: #000;}
+.subtext{ margin-top: 3px;;}
+.Dashboard{ margin-bottom: 50px; padding-bottom: 45px; background: #141414;}
+.Dashboard .bg-gray-200{background-color:rgb(54 54 54); box-shadow: none !important;}
+.Dashboard h2{ color:#fff;}
+.Dashboard p{ color:#fff;}
+.rightbox .text-sm {
+    font-size: 14px;
+    line-height: 22px;
+    color: #fff !important;
+}
+.rightbox .text-lg {
+    font-size: 14px;
+    line-height: 1.75rem;
+    color: #fff;
+    font-weight: 600 !important;
+}
+.rightbox input{background: #282828;
+    padding: 10px 15px;
+    border: 1px solid #565656;}
+.bsbox button{ background:#fff !important;}
+.bsbox .bg-gray-400 { --tw-bg-opacity: 1; background-color: rgb(126 126 126); color: #000 !important;}
+.buttonbox button {
+    border-radius: 8px;
+    height: 40px;
+    padding: 8px 13px;
+    font-size: 16px !important;
+    margin-left: 0px !important;
+}
+
+.PriceChart{margin-top: 15px;}
+.PriceChart thead{background: #ddd;font-size: 16px;}
+.PriceChart table tr td a{color: rgb(0 71 163) !important;}
+.title{ font-size: 28px;margin-bottom: 20px;}
+.pricechart tr td a{color: #004793;}
+.pricetabel{ margin-bottom:50px;}
+.pricechart thead{ background:#e7e7e7;}
+
+.buysell .bg-gold{border-radius:5px; background: #fff; box-shadow: none; color: #000; }
+.pricetabel {}
+.buysell p{ color:#fff;}
+.buysell label{ color:#fff;}
+.pricechart tr th{font-size: 14px;}
+.pricechart tr td{font-size: 14px;}
+.sell{color:#fff;}
+.buy{color:#fff;}
+.buybox{ margin-bottom:50px;}
+.boxc{    background: #343434;}
+.boxc ul li{ color:#fff;}
+.boxc ul li a{ color:#fff;font-size: 13px !important;  font-weight: 300;}
+.boxc h3{color:#fff; font-size:22px !important; margin-bottom:15px; margin-top:15px;}
+.lasstbutton {margin-top: 30px; background: #fff !important; color: #000 !important; border: none !important;}
+.chartbox{ margin-top:20px;}
+.receivedvalu{ float:right;}
+.aboutdetais h1{ color:#fff; font-size:35px;}
+.aboutdetais p{ color: #fff; font-size:16px !important; margin-bottom: 10px; line-height:28px; text-align:justify;}
+
+.mainslider{ background:#000; padding:70px 0px 75px;}
+.mainslider p{ color:#fff;     font-size: 16px !important; margin-bottom:10px;}
+.mainslider h1{ font-size:45px !important; font-weight:600; color:#fff;font-family: "Rufina", serif;    margin-top: 40px;}
+.mainslider h2 {
+    font-size: 45px !important;
+    font-weight: 600;
+    color: #fff;
+    font-family: "Rufina", serif;
+    margin-top: 14px;
+    margin-bottom:30px;
+}
+.aboutdetais h1{ margin-bottom:20px;}
+.slidersection{ padding:50px 0px;}
+
+#particle-canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute !important; 
+  top: 0;
+  left: 0;
+}
+.videosec iframe{ border:1px solid #4c4c4c; border-radius:20px;}
+
+.socialicon i{ background:#3e3e3e; padding:8px 8px; margin-right:5px; border-radius:5px;font-size: 18px;}
+.socialicon i:hover{background:#fff; color:#000;}
+
+
+.particles-container {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+#particles-js {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Push canvas behind the content */
+}
+
+.mainslider .container {
+  position: relative;
+  z-index: 1; /* Ensure content is above the canvas */
+}
+canvas{background: #ffffff !important; border-radius: 20px !important; }
+.boxc{padding: 15px; border: 1px solid #464646; border-radius: 10px;}
+.boxc .socialicon i {
+    background: #525252;
+    padding: 6px 7px;
+    margin-right: 5px;
+    border-radius: 5px;
+    font-size: 17px;
+    color: #fff;
+}
+.boxc .socialicon i:hover{background: #ffffff;color: #000 !important;}
+.tokenomic{ margin-top:25px;}
+
+.boxc p{ color:#e9e9e9; margin-top:8px;}
+.tokeninfo{ margin-top:25px;}
+.boxc ul li {
+    /* line-height: 22px; */
+    list-style: none;
+    border-bottom: 1px dashed #505050;
+    padding: 6px 0px;
+    margin-top: 0px !important;
+}
+.boxc ul{ margin-left:-18px;}
+.separetar{margin-top: 22px;  border-top: 1px solid #4c4c4c;}
+.AllTransactions{ margin-top:20px;}
+.detaillogo{ margin-top:20px;}
+.detaillogo img{border:2px solid #afafaf; width: 80px; height:70px; border-radius: 10px;}
+.tokenname{font-size: 22px; color: #fff; margin-top: 10px; font-weight:600;}
+.progress{ margin-bottom:20px; margin-top:5px;}
+.bonding{font-size: 13px !important; color:#40a7ff !important;}
+.tokeninfo ul li span{ float:right;    color: #e9e9e9;}
+.buysell button {font-size: 16px !important;}
+.tpllogo img{float: left; width: 100%; height: 92px;}
+.detaillogo{ width:100%;}
+.lgs{ padding-left:0px;}
+.lgs h1{ margin-top:61px;}
+.tpllogo{background: linear-gradient(180deg, rgba(77, 77, 77, 1) 50%, rgba(32, 32, 32, 1) 50%); margin-bottom:20px;}
+.buysell{padding-top: 18px; border-top: 1px dashed #4e4e4e;}
+.connectbuttons button{background: #fff !important; font-size: 16px !important; color:#000 !important;}
+.connectbuttons button .iekbcc0{ color:#000 !important;}
+.successfullytoken p{color: #fff;}
+.successbox {background: #323232;  padding: 60px; border: 1px solid #484848; border-radius: 10px;}
+.successbox h3{ font-size:26px !important;    margin-bottom: 25px;}
+
+
+@media only screen and (max-width: 980px) {
+  main {padding: 0px 15px !important;}
+  .max-w-xs {max-width: 100%;}
+  .pt-\[75px\] {padding-top: 35px;}
+  header{padding: 0px 10px !important;}
+  .extraoptions .col-md-6{ width:100%;}
+  .extraoptions .col-md-4{ width:100%;}
+  .liquiditydiv{width:100% !important;}
+  .lastdiv{width:100% !important;}
+  .createrightbtn{margin-top: 35px;}
+  header .text-sm{font-size: 15px !important; padding: 0px 8px; margin-left:0px !important;}
+  header .w-8 {width:80px;}
+  .mainslider{ background:#000; padding:10px 0px 30px;}
+  .mainslider h1{font-size:38px !important;}
+  .mainslider h2{font-size:38px !important;}
+  .tpllogo img {float: left; width: auto; height: 70px; margin-right: 5px;}
+  .lgs h1 {margin-top: 31px;}
+  .buttonbox{    height: 80px; background:none;}
+  .buttonbox button{border: 1px solid #6a6a6a; margin-right: 4px !important; margin-bottom: 4px !important;    height: 38px;}
+}
+@media only screen and (max-width: 540px) {
+	header .text-sm {font-size: 12px;}
+	header button{font-size: 13px !important;}
+	.extraoptions .col-md-4{ width:100%;}
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px; /* Adjust this value for proper indentation */
+}
