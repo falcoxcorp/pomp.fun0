@@ -7,7 +7,7 @@ import { admin } from '../../helper/Helper';
 
 const Navbar = () => {
   const { t, i18n } = useTranslation(); // Use translation hook
-  const { address } = useAccount()
+  const { address } = useAccount();
   // Change language function
   const handleLanguageChange = (lang) => {
     i18n.changeLanguage(lang);
@@ -109,13 +109,6 @@ const Navbar = () => {
             />
           </div>
         </div>
-        </div>
-      </div>
-    </header>
-  );
-};
-
-export default Navbar;
         </div>
       </div>
     </header>
