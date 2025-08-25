@@ -60,7 +60,6 @@ const Home = () => {
                   <div className='floating-card floating-card-2'></div>
                   <div className='floating-card floating-card-3'></div>
                 </div>
-                <img src="./images/sliderimages.png" className="hero-image relative z-10" alt="FalcoX Hero" />
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1756109492996-0df3b8b4e8a5cdaa2a70aba07bbc4c3e.png" className="hero-image relative z-10" alt="FalcoX Hero" />
               </div>
             </div>
