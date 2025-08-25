@@ -399,7 +399,11 @@ input:checked + .slider:before {
 
 .cards:hover::before {
     opacity: 1;
-.cards:hover{background:#343434 !important;}
+}
+
+.cards:hover {
+    background: #343434 !important;
+}
 
 .cards.dark {
   color: #fff;
