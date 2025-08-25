@@ -1848,6 +1848,298 @@ canvas{background: #ffffff !important; border-radius: 20px !important; }
     66% { transform: translateY(5px) rotate(-1deg); }
 }
 
+/* Candlestick Chart V3 Styles */
+.candlestick-chart-v3-container {
+  background: linear-gradient(135deg, 
+    rgba(15, 15, 35, 0.95) 0%, 
+    rgba(25, 25, 45, 0.9) 50%, 
+    rgba(35, 35, 55, 0.85) 100%
+  );
+  border: 1px solid rgba(193, 164, 68, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(193, 164, 68, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.candlestick-chart-v3-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(193, 164, 68, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.candlestick-chart-v3-container .chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.candlestick-chart-v3-container .chart-title h3 {
+  color: #c1a444;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.candlestick-chart-v3-container .chart-subtitle {
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.candlestick-chart-v3-container .chart-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.candlestick-chart-v3-container .view-mode-selector,
+.candlestick-chart-v3-container .timeframe-selector {
+  display: flex;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid rgba(193, 164, 68, 0.2);
+}
+
+.candlestick-chart-v3-container .view-mode-btn,
+.candlestick-chart-v3-container .timeframe-btn {
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.candlestick-chart-v3-container .view-mode-btn:hover,
+.candlestick-chart-v3-container .timeframe-btn:hover {
+  background: rgba(193, 164, 68, 0.1);
+  color: #c1a444;
+  transform: translateY(-1px);
+}
+
+.candlestick-chart-v3-container .view-mode-btn.active,
+.candlestick-chart-v3-container .timeframe-btn.active {
+  background: linear-gradient(135deg, #c1a444 0%, #d4b851 100%);
+  color: #000;
+  box-shadow: 0 2px 8px rgba(193, 164, 68, 0.3);
+}
+
+.candlestick-chart-v3-container .price-info-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(193, 164, 68, 0.1);
+}
+
+.candlestick-chart-v3-container .price-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.candlestick-chart-v3-container .metric-label {
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.candlestick-chart-v3-container .metric-value {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.candlestick-chart-v3-container .metric-value.positive {
+  color: #4ade80;
+}
+
+.candlestick-chart-v3-container .metric-value.negative {
+  color: #ef4444;
+}
+
+.candlestick-chart-v3-container .chart-wrapper {
+  position: relative;
+  height: 400px;
+  margin-bottom: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(193, 164, 68, 0.1);
+  overflow: hidden;
+}
+
+.candlestick-chart-v3-container .chart-canvas {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.candlestick-chart-v3-container .chart-overlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.candlestick-chart-v3-container .trend-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  border: 1px solid rgba(193, 164, 68, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.candlestick-chart-v3-container .trend-indicator.positive {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+.candlestick-chart-v3-container .trend-indicator.negative {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.candlestick-chart-v3-container .trend-arrow {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.candlestick-chart-v3-container .chart-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.candlestick-chart-v3-container .chart-legend {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.candlestick-chart-v3-container .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.candlestick-chart-v3-container .legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.candlestick-chart-v3-container .legend-color.bullish {
+  background: #4ade80;
+}
+
+.candlestick-chart-v3-container .legend-color.bearish {
+  background: #ef4444;
+}
+
+.candlestick-chart-v3-container .chart-info {
+  color: #9ca3af;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.candlestick-chart-v3-container .chart-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 16px;
+}
+
+.candlestick-chart-v3-container .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(193, 164, 68, 0.3);
+  border-top: 3px solid #c1a444;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.candlestick-chart-v3-container .loading-text {
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .candlestick-chart-v3-container {
+    padding: 16px;
+    margin: 16px 0;
+  }
+  
+  .candlestick-chart-v3-container .chart-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .candlestick-chart-v3-container .chart-controls {
+    justify-content: center;
+  }
+  
+  .candlestick-chart-v3-container .price-info-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+  
+  .candlestick-chart-v3-container .chart-wrapper {
+    height: 300px;
+  }
+  
+  .candlestick-chart-v3-container .chart-footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
 /* ===== TRADING CHART V3 STYLES ===== */
 
 .trading-chart-v3-container {

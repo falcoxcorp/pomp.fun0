@@ -183,7 +183,16 @@ const CardPage = () => {
 
               </div>
 
-              {poolDetailsParsed.video.length >0 && <Video link={poolDetailsParsed.video} />}
+              <div className='boxc'>
+                <CandlestickChartV3 
+                  prices={prices}
+                  supplies={supplies}
+                  maxSupply={maxSupply}
+                  currentPrice={currentPrice}
+                  symbol={poolDetailsParsed.symbol || 'TOKEN'}
+                  nativeCurrency={chain?.nativeCurrency?.symbol || 'ETH'}
+                />
+              </div>
 
               <div className='boxc AllTransactions'>
                 <TradeEventList contractAddress={token} />
