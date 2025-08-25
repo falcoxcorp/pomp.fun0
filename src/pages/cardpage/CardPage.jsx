@@ -8,8 +8,8 @@ import { useAccount, useReadContract, useReadContracts } from 'wagmi';
 import logo from "../../assets/logo/logo.png";
 import TradeEventList from '../../components/Statistics/TradeEventList';
 import { config } from '../../wagmiClient';
-import { Line } from 'react-chartjs-2';
-import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale } from 'chart.js';
+import TradingChart from '../../components/TradingChart/TradingChart';
+import '../../components/TradingChart/TradingChart.css';
 import BuySell from '../../components/BuySell/BuySell';
 import { useEffect } from 'react';
 import TokenInfo from '../../components/TokenInfo/TokenInfo';
@@ -86,62 +86,20 @@ const CardPage = () => {
   const baseReserve = Number(data[0].result.virtualBaseReserve) / (10 ** 18);
   const quoteReserve = Number(data[0].result.virtualQuoteReserve) / (10 ** 18);
   const maxSupply = Number(data[0].result.maxListingBaseAmount) / (10 ** 18);
+  const currentPrice = quoteReserve / baseReserve;
 
-console.log({poolDetailsParsed})
-  const prices = [];
-  const supplies = [];
+  console.log({poolDetailsParsed})
 
-  // Generate price points based on bonding curve
-  for (let supply = 1; supply <= maxSupply; supply += maxSupply / 1000) {
-    const adjustedBaseReserve = baseReserve + supply;
-    const price = quoteReserve / adjustedBaseReserve;
-    prices.push(price * (10 ** 9));
-    supplies.push(supply);
-  }
-
-  Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale);
-  const chartData = {
-    labels: supplies,
-    datasets: [
-      {
-        label: 'Price vs. Supply',
-        data: prices,
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderWidth: 1,
-        tension: 0.4,
-      },
-    ],
+  // Prepare token data for the trading chart
+  const tokenChartData = {
+    symbol: poolDetailsParsed.symbol || 'TOKEN',
+    name: poolDetailsParsed.name || 'Token',
+    currentPrice: currentPrice,
+    baseReserve: baseReserve,
+    quoteReserve: quoteReserve,
+    maxSupply: maxSupply,
+    marketCap: parseInt(data[0].result.virtualQuoteReserve) * 10000000 * priceInDollar['1868'] / parseInt(data[0].result.virtualBaseReserve)
   };
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-      },
-      title: {
-        display: true,
-        text: 'Bonding Curve',
-      },
-    },
-    scales: {
-      x: {
-        type: 'linear',
-        title: {
-          display: true,
-          text: `Supply in ${chain?.nativeCurrency?.symbol ?? 'ETH'}`,
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Price in Gwei',
-        },
-      },
-    },
-  };
-
 
 
   return (
@@ -183,9 +141,12 @@ console.log({poolDetailsParsed})
 
               </div>
 
-              <div className='boxc chartbox' style={{ width: '100%' }}>
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">Bonding Curve</h3>
-                <Line data={chartData} options={options} />
+              <div className='boxc chartbox'>
+                <TradingChart 
+                  tokenData={tokenChartData}
+                  height={500}
+                  className="bonding-curve-chart"
+                />
               </div>
 
               <div className='boxc AllTransactions'>
