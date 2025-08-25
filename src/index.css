@@ -713,7 +713,6 @@ canvas{background: #ffffff !important; border-radius: 20px !important; }
   border: 2px solid transparent;
   background-clip: padding-box;
   backdrop-filter: blur(10px);
-  color: #000000 !important;
 }
 
 .custom-wallet-btn::before {
@@ -742,15 +741,6 @@ canvas{background: #ffffff !important; border-radius: 20px !important; }
   box-shadow: none !important;
 }
 
-/* Ensure all text inside the button is black */
-.custom-wallet-btn span,
-.custom-wallet-btn div {
-  color: #000000 !important;
-}
-
-.custom-wallet-btn svg {
-  color: #000000 !important;
-}
 /* Responsive Design for Navbar */
 @media (max-width: 768px) {
   .navbar-links {
