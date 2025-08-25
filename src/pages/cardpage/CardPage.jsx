@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { readContract } from 'wagmi/actions';
+import { formatUnits } from 'ethers';
 import abi from "../../helper/ManagerFaucetAbi.json";
 import { daimond, priceInDollar, routers } from '../../helper/Helper';
 import TokenAbi from '../../helper/TokenAbi.json';
@@ -84,9 +85,9 @@ const CardPage = () => {
   }
 
   const poolDetailsParsed = data[0].result?.poolDetails ? JSON.parse(data[0].result.poolDetails) : {};
-  const baseReserve = Number(data[0].result.virtualBaseReserve) / (10 ** 18);
-  const quoteReserve = Number(data[0].result.virtualQuoteReserve) / (10 ** 18);
-  const maxSupply = Number(data[0].result.maxListingBaseAmount) / (10 ** 18);
+  const baseReserve = parseFloat(formatUnits(data[0].result.virtualBaseReserve, 18));
+  const quoteReserve = parseFloat(formatUnits(data[0].result.virtualQuoteReserve, 18));
+  const maxSupply = parseFloat(formatUnits(data[0].result.maxListingBaseAmount, 18));
 
 console.log({poolDetailsParsed})
   const prices = [];
@@ -212,13 +213,13 @@ console.log({poolDetailsParsed})
           <div className='grid grid-cols-2 lg:grid-cols-4 gap-8'>
             <div className='stat-card text-center'>
               <div className='stat-number text-3xl font-bold mb-2 gradient-text'>
-                ${(parseInt(data[0].result.virtualQuoteReserve) * 10000000 * priceInDollar['1868'] / parseInt(data[0].result.virtualBaseReserve)).toFixed(2)}
+                ${(parseFloat(formatUnits(data[0].result.virtualQuoteReserve, 18)) * 10000000 * priceInDollar['1868'] / parseFloat(formatUnits(data[0].result.virtualBaseReserve, 18))).toFixed(2)}
               </div>
               <div className='stat-label text-gray-400'>Market Cap</div>
             </div>
             <div className='stat-card text-center'>
               <div className='stat-number text-3xl font-bold mb-2 gradient-text'>
-                {parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee) * 100)}%
+                {Math.floor((parseFloat(formatUnits(data[0].result.virtualQuoteReserve, 18)) - parseFloat(formatUnits(data[1].result.initialVirtualQuoteReserve, 18))) / (parseFloat(formatUnits(data[0].result.maxListingQuoteAmount, 18)) + parseFloat(formatUnits(data[0].result.listingFee, 18))) * 100)}%
               </div>
               <div className='stat-label text-gray-400'>Progress</div>
             </div>
@@ -298,13 +299,13 @@ console.log({poolDetailsParsed})
                   </div>
                   <div className="progress mb-4">
                     <div className="progress-bar" role="progressbar" 
-                         style={{ width: `${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee) * 100)}%` }}>
-                      {parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee) * 100)}%
+                         style={{ width: `${Math.floor((parseFloat(formatUnits(data[0].result.virtualQuoteReserve, 18)) - parseFloat(formatUnits(data[1].result.initialVirtualQuoteReserve, 18))) / (parseFloat(formatUnits(data[0].result.maxListingQuoteAmount, 18)) + parseFloat(formatUnits(data[0].result.listingFee, 18))) * 100)}%` }}>
+                      {Math.floor((parseFloat(formatUnits(data[0].result.virtualQuoteReserve, 18)) - parseFloat(formatUnits(data[1].result.initialVirtualQuoteReserve, 18))) / (parseFloat(formatUnits(data[0].result.maxListingQuoteAmount, 18)) + parseFloat(formatUnits(data[0].result.listingFee, 18))) * 100)}%
                     </div>
                   </div>
                   <p className="text-sm text-gray-400 mb-4">
                     When the market cap hits <span className='gradient-text font-bold'>
-                      ${(parseInt(data[1].result.maxListingQuoteAmount) * 10000000 * priceInDollar['1868'] / parseInt(data[1].result.maxListingBaseAmount)).toString()}
+                      ${(parseFloat(formatUnits(data[1].result.maxListingQuoteAmount, 18)) * 10000000 * priceInDollar['1868'] / parseFloat(formatUnits(data[1].result.maxListingBaseAmount, 18))).toFixed(2)}
                     </span>, all liquidity from the bonding curve will be deposited into the DEX and burned.
                   </p>
                 </div>

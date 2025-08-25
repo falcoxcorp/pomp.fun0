@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatUnits } from 'ethers';
 import { useAccount, useReadContract } from 'wagmi';
 import abi from "../../helper/ManagerFaucetAbi.json";
 import { daimond, priceInDollar } from '../../helper/Helper';
@@ -68,7 +69,7 @@ const Card = ({ id, reserve, activeTable }) => {
             <span>Progress</span>
             <span className='hardcap'>Hard Cap</span>
             <div className="progress">
-              <div className="progress-bar" role="progressbar" style={{ width: `${parseInt((data.virtualQuoteReserve - reserve.initialVirtualQuoteReserve) / (data.maxListingQuoteAmount + data.listingFee)) ** 100}%` }} aria-valuenow={`${parseInt((data.virtualQuoteReserve - reserve.initialVirtualQuoteReserve) / (data.maxListingQuoteAmount + data.listingFee)) ** 100}`} aria-valuemin="0" aria-valuemax="100">{parseInt((data.virtualQuoteReserve - reserve.initialVirtualQuoteReserve) / (data.maxListingQuoteAmount + data.listingFee)) ** 100}%</div>
+              <div className="progress-bar" role="progressbar" style={{ width: `${Math.floor((parseFloat(formatUnits(data.virtualQuoteReserve, 18)) - parseFloat(formatUnits(reserve.initialVirtualQuoteReserve, 18))) / (parseFloat(formatUnits(data.maxListingQuoteAmount, 18)) + parseFloat(formatUnits(data.listingFee, 18))) * 100)}%` }} aria-valuenow={`${Math.floor((parseFloat(formatUnits(data.virtualQuoteReserve, 18)) - parseFloat(formatUnits(reserve.initialVirtualQuoteReserve, 18))) / (parseFloat(formatUnits(data.maxListingQuoteAmount, 18)) + parseFloat(formatUnits(data.listingFee, 18))) * 100)}`} aria-valuemin="0" aria-valuemax="100">{Math.floor((parseFloat(formatUnits(data.virtualQuoteReserve, 18)) - parseFloat(formatUnits(reserve.initialVirtualQuoteReserve, 18))) / (parseFloat(formatUnits(data.maxListingQuoteAmount, 18)) + parseFloat(formatUnits(data.listingFee, 18))) * 100)}%</div>
             </div>
             <span className='price'>4.913k  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAAAAABXZoBIAAAA3ElEQVR4AY3SgQbCYBTF8fNmgV4ggEAAI4hAYDAEHwQD+AAG9AABMIAIAhgYAhYwbt3bubol1R+MH2d3DPKlv7HNKdUfsV9Ca08ounesYB3PuFe+4iQaMHGMdgKiIm5ey1RQS8eOJlaC1RELaK2wA7TigaPveFtoo2HL52dcUsy+wviebGgX1BF3uJd+IWeXEec+6wcFG/yz4cdVb/dAHriG1rg10DbEHtZ6MNvDuhD1Omu6WY20WhxlBtbTFkIMeglG1GqzBlYWRzZU6LPRdpCIbNzn5tD9/1N/6QZlMwcqRvoNxQAAAABJRU5ErkJggg==" className="chainimg" alt="ETH" /></span>
 
@@ -85,7 +86,7 @@ const Card = ({ id, reserve, activeTable }) => {
             <i className="fa fa-twitter"></i>
           </span>
           <span className="MCap">
-            MCap: ${parseFloat(parseInt(data.virtualQuoteReserve) * 10000000 * priceInDollar['1868'] / parseInt(data.maxListingBaseAmount)).toFixed(12)}
+            MCap: ${(parseFloat(formatUnits(data.virtualQuoteReserve, 18)) * 10000000 * priceInDollar['1868'] / parseFloat(formatUnits(data.maxListingBaseAmount, 18))).toFixed(12)}
           </span>
         </p>
       </div>
