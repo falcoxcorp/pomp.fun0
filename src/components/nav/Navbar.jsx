@@ -72,13 +72,13 @@ const Navbar = () => {
                     onClick={openAccountModal}
                     className="wallet-btn wallet-btn-connected group px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 bg-gradient-to-r from-gray-800 to-black text-white border-2 border-gray-600 hover:from-black hover:to-gray-900 hover:border-gray-500 hover:shadow-lg hover:shadow-black/30 hover:-translate-y-1"
                   >
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    <div className="flex items-center gap-2 text-black">
+                      <div className="w-2 h-2 bg-black rounded-full animate-pulse"></div>
                       <span className="wallet-btn-text">
                         {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Conectado'}
                       </span>
                       <div className="wallet-btn-icon transition-transform group-hover:scale-110">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="black">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                         </svg>
                       </div>
@@ -93,16 +93,16 @@ const Navbar = () => {
                   disabled={isConnecting}
                   className="wallet-btn wallet-btn-disconnected group px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 bg-gradient-to-r from-gray-700 to-gray-900 text-white border-2 border-gray-600 hover:from-gray-800 hover:to-black hover:border-gray-500 hover:shadow-lg hover:shadow-black/30 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:transform-none"
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-white rounded-full opacity-60"></div>
+                  <div className="flex items-center gap-2 text-black">
+                    <div className="w-2 h-2 bg-black rounded-full opacity-60"></div>
                     <span className="wallet-btn-text">
                       {isConnecting ? 'Connecting...' : t('connectWallet')}
                     </span>
                     <div className="wallet-btn-icon transition-transform group-hover:scale-110">
                       {isConnecting ? (
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                       ) : (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="black">
                           <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
                         </svg>
                       )}

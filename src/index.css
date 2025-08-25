@@ -705,7 +705,6 @@ canvas{background: #ffffff !important; border-radius: 20px !important; }
 
 .connect-wallet-btn svg {
   color: #000000 !important;
-}
 
 /* Responsive Design for Navbar */
 @media (max-width: 768px) {
