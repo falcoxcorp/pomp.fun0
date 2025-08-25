@@ -1,19 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, Tooltip, Legend } from 'chart.js';
-import { CandlestickController, CandlestickElement } from 'chartjs-chart-financial';
-import 'chartjs-adapter-date-fns';
-import { Chart } from 'react-chartjs-2';
-
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  TimeScale,
-  Tooltip,
-  Legend,
-  CandlestickController,
-  CandlestickElement
-);
+import { createChart, ColorType } from 'lightweight-charts';
 
 const CandlestickChartV3 = ({ 
   prices = [], 
@@ -23,46 +9,120 @@ const CandlestickChartV3 = ({
   symbol = 'TOKEN',
   nativeCurrency = 'ETH'
 }) => {
-  const chartRef = useRef(null);
+  const chartContainerRef = useRef();
+  const chartRef = useRef();
+  const candlestickSeriesRef = useRef();
+  const volumeSeriesRef = useRef();
   const [isLoading, setIsLoading] = useState(true);
-  const [chartData, setChartData] = useState(null);
   const [timeframe, setTimeframe] = useState('15m');
-  const [chartType, setChartType] = useState('candlestick');
-  const [showVolume, setShowVolume] = useState(true);
   const [priceChange, setPriceChange] = useState(2.45);
   const [volume24h, setVolume24h] = useState(1250000);
 
   useEffect(() => {
-    if (prices.length > 0 && supplies.length > 0) {
+    if (chartContainerRef.current && prices.length > 0 && supplies.length > 0) {
       setIsLoading(true);
-      
+
+      // Create chart
+      const chart = createChart(chartContainerRef.current, {
+        layout: {
+          background: { type: ColorType.Solid, color: '#0d1421' },
+          textColor: '#d1d4dc',
+          fontSize: 12,
+          fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif',
+        },
+        grid: {
+          vertLines: { color: '#21262d' },
+          horzLines: { color: '#21262d' },
+        },
+        crosshair: {
+          mode: 1,
+          vertLine: {
+            color: '#758696',
+            width: 1,
+            style: 2,
+          },
+          horzLine: {
+            color: '#758696',
+            width: 1,
+            style: 2,
+          },
+        },
+        rightPriceScale: {
+          borderColor: '#21262d',
+          textColor: '#d1d4dc',
+          entireTextOnly: true,
+        },
+        timeScale: {
+          borderColor: '#21262d',
+          textColor: '#d1d4dc',
+          timeVisible: true,
+          secondsVisible: false,
+        },
+        watermark: {
+          visible: false,
+        },
+        handleScroll: {
+          mouseWheel: true,
+          pressedMouseMove: true,
+        },
+        handleScale: {
+          axisPressedMouseMove: true,
+          mouseWheel: true,
+          pinch: true,
+        },
+      });
+
+      chartRef.current = chart;
+
       // Generate professional candlestick data
       const candlestickData = generateProfessionalCandlestickData(prices, supplies);
-      
-      const data = {
-        datasets: [
-          {
-            label: `${symbol}/${nativeCurrency}`,
-            data: candlestickData,
-            borderColor: '#2962ff',
-            backgroundColor: 'rgba(41, 98, 255, 0.1)',
-            borderWidth: 1,
-            color: {
-              up: '#26a69a',
-              down: '#ef5350',
-              unchanged: '#999999'
-            },
-            borderColor: {
-              up: '#26a69a',
-              down: '#ef5350',
-              unchanged: '#999999'
-            }
-          }
-        ]
-      };
+      const volumeData = generateVolumeData(candlestickData);
 
-      setChartData(data);
+      // Add candlestick series
+      const candlestickSeries = chart.addCandlestickSeries({
+        upColor: '#26a69a',
+        downColor: '#ef5350',
+        borderDownColor: '#ef5350',
+        borderUpColor: '#26a69a',
+        wickDownColor: '#ef5350',
+        wickUpColor: '#26a69a',
+        priceFormat: {
+          type: 'price',
+          precision: 8,
+          minMove: 0.00000001,
+        },
+      });
+
+      candlestickSeriesRef.current = candlestickSeries;
+      candlestickSeries.setData(candlestickData);
+
+      // Add volume series
+      const volumeSeries = chart.addHistogramSeries({
+        color: '#26a69a',
+        priceFormat: {
+          type: 'volume',
+        },
+        priceScaleId: '',
+        scaleMargins: {
+          top: 0.7,
+          bottom: 0,
+        },
+      });
+
+      volumeSeriesRef.current = volumeSeries;
+      volumeSeries.setData(volumeData);
+
+      // Fit content
+      chart.timeScale().fitContent();
+
       setTimeout(() => setIsLoading(false), 800);
+
+      // Cleanup function
+      return () => {
+        if (chartRef.current) {
+          chartRef.current.remove();
+        }
+      };
     }
   }, [prices, supplies, symbol, nativeCurrency, timeframe]);
 
@@ -84,19 +144,27 @@ const CandlestickChartV3 = ({
         
         // Generate realistic timestamps
         const timeInterval = getTimeInterval(timeframe);
-        const timestamp = Date.now() - (dataPoints - i) * timeInterval;
+        const timestamp = Math.floor((Date.now() - (dataPoints - i) * timeInterval) / 1000);
         
         candlesticks.push({
-          x: timestamp,
-          o: open,
-          h: high,
-          l: low,
-          c: close
+          time: timestamp,
+          open: open,
+          high: high,
+          low: low,
+          close: close
         });
       }
     }
     
-    return candlesticks;
+    return candlesticks.sort((a, b) => a.time - b.time);
+  };
+
+  const generateVolumeData = (candlestickData) => {
+    return candlestickData.map(candle => ({
+      time: candle.time,
+      value: Math.random() * 1000000 + 100000,
+      color: candle.close >= candle.open ? '#26a69a80' : '#ef535080'
+    }));
   };
 
   const getTimeInterval = (tf) => {
@@ -111,116 +179,6 @@ const CandlestickChartV3 = ({
     return intervals[tf] || 900000;
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-      intersect: false,
-      mode: 'index'
-    },
-    plugins: {
-      legend: {
-        display: false
-      },
-      tooltip: {
-        backgroundColor: 'rgba(22, 27, 34, 0.95)',
-        titleColor: '#ffffff',
-        bodyColor: '#ffffff',
-        borderColor: '#30363d',
-        borderWidth: 1,
-        cornerRadius: 8,
-        padding: 12,
-        displayColors: false,
-        titleFont: {
-          size: 12,
-          weight: 'bold',
-          family: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif'
-        },
-        bodyFont: {
-          size: 11,
-          family: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif'
-        },
-        callbacks: {
-          title: (context) => {
-            const date = new Date(context[0].parsed.x);
-            return date.toLocaleString('en-US', {
-              month: 'short',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false
-            });
-          },
-          label: (context) => {
-            const data = context.raw;
-            return [
-              `Open: ${data.o.toFixed(8)}`,
-              `High: ${data.h.toFixed(8)}`,
-              `Low: ${data.l.toFixed(8)}`,
-              `Close: ${data.c.toFixed(8)}`,
-              `Change: ${((data.c - data.o) / data.o * 100).toFixed(2)}%`
-            ];
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        type: 'time',
-        time: {
-          unit: timeframe.includes('m') ? 'minute' : timeframe.includes('h') ? 'hour' : 'day',
-          displayFormats: {
-            minute: 'HH:mm',
-            hour: 'MMM dd HH:mm',
-            day: 'MMM dd'
-          }
-        },
-        grid: {
-          color: '#21262d',
-          drawBorder: false,
-          lineWidth: 1
-        },
-        ticks: {
-          color: '#7d8590',
-          font: {
-            size: 10,
-            family: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif'
-          },
-          maxTicksLimit: 8
-        },
-        border: {
-          display: false
-        }
-      },
-      y: {
-        position: 'right',
-        grid: {
-          color: '#21262d',
-          drawBorder: false,
-          lineWidth: 1
-        },
-        ticks: {
-          color: '#7d8590',
-          font: {
-            size: 10,
-            family: 'SF Pro Display, -apple-system, BlinkMacSystemFont, sans-serif'
-          },
-          callback: function(value) {
-            return value.toFixed(6);
-          },
-          padding: 8
-        },
-        border: {
-          display: false
-        }
-      }
-    },
-    animation: {
-      duration: 750,
-      easing: 'easeInOutQuart'
-    }
-  };
-
   const timeframes = [
     { key: '1m', label: '1m' },
     { key: '5m', label: '5m' },
@@ -228,12 +186,6 @@ const CandlestickChartV3 = ({
     { key: '1h', label: '1h' },
     { key: '4h', label: '4h' },
     { key: '1d', label: '1D' }
-  ];
-
-  const chartTypes = [
-    { key: 'candlestick', label: '📊', name: 'Candlestick' },
-    { key: 'line', label: '📈', name: 'Line' },
-    { key: 'area', label: '📉', name: 'Area' }
   ];
 
   if (isLoading) {
@@ -254,7 +206,7 @@ const CandlestickChartV3 = ({
         <div className="chart-symbol-section">
           <div className="symbol-main">
             <span className="symbol-pair">{symbol}/{nativeCurrency}</span>
-            <span className="chart-interval">15m</span>
+            <span className="chart-interval">{timeframe}</span>
             <span className="exchange-info">• FalcoX v3 (CORE)</span>
           </div>
           <div className="price-section">
@@ -269,18 +221,6 @@ const CandlestickChartV3 = ({
         </div>
         
         <div className="chart-tools-section">
-          <div className="chart-type-selector">
-            {chartTypes.map((type) => (
-              <button
-                key={type.key}
-                className={`chart-type-btn ${chartType === type.key ? 'active' : ''}`}
-                onClick={() => setChartType(type.key)}
-                title={type.name}
-              >
-                {type.label}
-              </button>
-            ))}
-          </div>
           <div className="chart-indicators">
             <button className="indicator-btn">📊 Indicators</button>
             <button className="indicator-btn">📏 Drawing</button>
@@ -304,10 +244,7 @@ const CandlestickChartV3 = ({
         </div>
         
         <div className="chart-options">
-          <button 
-            className={`volume-toggle ${showVolume ? 'active' : ''}`}
-            onClick={() => setShowVolume(!showVolume)}
-          >
+          <button className="volume-toggle active">
             📊 Volume
           </button>
           <button className="fullscreen-btn">⛶</button>
@@ -338,84 +275,11 @@ const CandlestickChartV3 = ({
 
       {/* Main Chart Area */}
       <div className="professional-chart-wrapper">
-        {/* Price Scale Labels */}
-        <div className="price-scale-professional">
-          <div className="price-level high">{(currentPrice * 1.2).toFixed(6)}</div>
-          <div className="price-level mid">{currentPrice.toFixed(6)}</div>
-          <div className="price-level low">{(currentPrice * 0.8).toFixed(6)}</div>
-        </div>
-        
-        <div className="chart-canvas-professional">
-          {chartData && (
-            <Chart
-              ref={chartRef}
-              type="candlestick"
-              data={chartData}
-              options={options}
-            />
-          )}
-        </div>
-
-        {/* Chart Crosshair */}
-        <div className="chart-crosshair">
-          <div className="crosshair-horizontal"></div>
-          <div className="crosshair-vertical"></div>
-        </div>
-      </div>
-
-      {/* Volume Chart Section */}
-      {showVolume && (
-        <div className="volume-chart-professional">
-          <div className="volume-header">
-            <span className="volume-title">Volume</span>
-            <span className="volume-value">{volume24h.toLocaleString()}</span>
-          </div>
-          <div className="volume-bars-container">
-            {Array.from({ length: 100 }, (_, i) => (
-              <div 
-                key={i} 
-                className={`volume-bar-professional ${Math.random() > 0.5 ? 'positive' : 'negative'}`}
-                style={{ 
-                  height: `${Math.random() * 80 + 10}%`,
-                  opacity: 0.7 + Math.random() * 0.3
-                }}
-              ></div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Time Scale Navigation */}
-      <div className="time-scale-professional">
-        <div className="time-navigation">
-          <button className="nav-btn">◀</button>
-          <div className="time-labels-professional">
-            <span>1Y</span>
-            <span>6M</span>
-            <span>3M</span>
-            <span>1M</span>
-            <span>1W</span>
-            <span>1D</span>
-          </div>
-          <button className="nav-btn">▶</button>
-        </div>
-        <div className="zoom-controls">
-          <button className="zoom-btn">🔍+</button>
-          <button className="zoom-btn">🔍-</button>
-          <button className="zoom-btn">↻ Reset</button>
-        </div>
-      </div>
-
-      {/* Trading Panel */}
-      <div className="trading-panel-overlay">
-        <div className="quick-trade-buttons">
-          <button className="quick-buy-btn">Quick Buy</button>
-          <button className="quick-sell-btn">Quick Sell</button>
-        </div>
-        <div className="market-status">
-          <div className="status-indicator active"></div>
-          <span>Market Open</span>
-        </div>
+        <div 
+          ref={chartContainerRef} 
+          className="chart-canvas-professional"
+          style={{ height: '500px', width: '100%' }}
+        />
       </div>
 
       {/* Chart Footer */}
