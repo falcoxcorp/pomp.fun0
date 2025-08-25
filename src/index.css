@@ -429,14 +429,15 @@ input:checked + .slider:before {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+.progress { 
     height: 14px;
     background: linear-gradient(90deg, #2a2a2a 0%, #404040 100%);
-}
     margin-bottom: 8px;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
     position: relative;
+    width: 100%;
 }
 
 .progress::before {
@@ -448,7 +449,7 @@ input:checked + .slider:before {
     height: 2px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     border-radius: 10px 10px 0 0;
-.progress{ height:12px;background-color: #5e5e5e;    width: 100%;    margin-bottom: 1px;}
+}
 
 .hardcap{ float:right;}
 .hardcapchainimg{width: 21px; float: left;}
