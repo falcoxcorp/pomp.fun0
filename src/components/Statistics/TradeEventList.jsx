@@ -22,9 +22,10 @@ const tradeEventAbi = {
 };
 
 // Constants for block range management
-const MAX_BLOCK_RANGE = 500; // Alchemy's limit for Soneium
+const MAX_BLOCK_RANGE = 499; // Alchemy's strict limit for Soneium (using 499 to be safe)
 const RETRY_ATTEMPTS = 3;
 const RETRY_DELAY = 1000; // 1 second base delay
+const CHUNK_DELAY = 150; // Delay between chunks to avoid rate limiting
 
 // Utility function to sleep/delay execution
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -38,32 +39,79 @@ const isRetryableError = (error) => {
     message.includes('network') ||
     message.includes('connection') ||
     message.includes('too many requests') ||
+    message.includes('block range') ||
+    message.includes('query returned more than') ||
     error.code === -32005 || // Rate limit exceeded
-    error.code === -32000    // Generic server error
+    error.code === -32000 ||  // Generic server error
+    error.code === -32602     // Invalid params (often block range related)
   );
+};
+
+// Utility function to normalize block numbers (handle both hex and decimal)
+const normalizeBlockNumber = (blockNumber) => {
+  if (typeof blockNumber === 'string' && blockNumber.startsWith('0x')) {
+    return BigInt(blockNumber);
+  }
+  return BigInt(blockNumber);
+};
+
+// Validate block range inputs
+const validateBlockRange = (fromBlock, toBlock) => {
+  try {
+    const from = normalizeBlockNumber(fromBlock);
+    const to = normalizeBlockNumber(toBlock);
+    
+    if (from < 0n || to < 0n) {
+      throw new Error('Block numbers must be non-negative');
+    }
+    
+    if (from > to) {
+      throw new Error('fromBlock cannot be greater than toBlock');
+    }
+    
+    return { from, to };
+  } catch (error) {
+    throw new Error(`Invalid block range: ${error.message}`);
+  }
 };
 
 // Robust log fetching with chunking and retry logic
 const fetchLogsWithChunking = async (publicClient, contractAddress, fromBlock, toBlock, eventAbi) => {
-  const totalBlocks = Number(toBlock - fromBlock);
+  // Validate and normalize block numbers
+  const { from: normalizedFromBlock, to: normalizedToBlock } = validateBlockRange(fromBlock, toBlock);
+  const totalBlocks = Number(normalizedToBlock - normalizedFromBlock);
+  
+  // Handle edge case where range is 0 or negative
+  if (totalBlocks <= 0) {
+    console.log('📊 Empty or invalid block range, returning empty results');
+    return [];
+  }
+  
   const chunks = Math.ceil(totalBlocks / MAX_BLOCK_RANGE);
   
   console.log(`📊 Fetching logs across ${totalBlocks} blocks in ${chunks} chunks`);
+  console.log(`📋 Block range: ${normalizedFromBlock.toString()} to ${normalizedToBlock.toString()}`);
   
   let allLogs = [];
   let processedChunks = 0;
+  let failedChunks = 0;
 
   for (let i = 0; i < chunks; i++) {
-    const chunkFromBlock = fromBlock + BigInt(i * MAX_BLOCK_RANGE);
+    const chunkFromBlock = normalizedFromBlock + BigInt(i * MAX_BLOCK_RANGE);
     const chunkToBlock = i === chunks - 1 
-      ? toBlock 
-      : fromBlock + BigInt((i + 1) * MAX_BLOCK_RANGE - 1);
+      ? normalizedToBlock 
+      : normalizedFromBlock + BigInt((i + 1) * MAX_BLOCK_RANGE - 1);
 
-    console.log(`🔄 Processing chunk ${i + 1}/${chunks}: blocks ${chunkFromBlock} to ${chunkToBlock}`);
+    // Ensure we don't exceed the original toBlock
+    const actualChunkToBlock = chunkToBlock > normalizedToBlock ? normalizedToBlock : chunkToBlock;
+    const chunkSize = Number(actualChunkToBlock - chunkFromBlock + 1n);
+
+    console.log(`🔄 Processing chunk ${i + 1}/${chunks}: blocks ${chunkFromBlock.toString()} to ${actualChunkToBlock.toString()} (${chunkSize} blocks)`);
 
     // Retry logic for each chunk
     let chunkLogs = [];
     let attempt = 0;
+    let chunkSuccess = false;
     
     while (attempt < RETRY_ATTEMPTS) {
       try {
@@ -71,32 +119,37 @@ const fetchLogsWithChunking = async (publicClient, contractAddress, fromBlock, t
           address: contractAddress,
           event: eventAbi,
           fromBlock: chunkFromBlock,
-          toBlock: chunkToBlock,
+          toBlock: actualChunkToBlock,
         });
         
         console.log(`✅ Chunk ${i + 1} completed: ${chunkLogs.length} logs found`);
+        chunkSuccess = true;
         break; // Success, exit retry loop
         
       } catch (error) {
         attempt++;
-        console.warn(`⚠️ Chunk ${i + 1} attempt ${attempt} failed:`, error.message);
+        const errorMsg = error.message || error.toString();
+        console.warn(`⚠️ Chunk ${i + 1} attempt ${attempt}/${RETRY_ATTEMPTS} failed:`, errorMsg);
         
         if (attempt >= RETRY_ATTEMPTS) {
-          console.error(`❌ Chunk ${i + 1} failed after ${RETRY_ATTEMPTS} attempts`);
+          console.error(`❌ Chunk ${i + 1} failed after ${RETRY_ATTEMPTS} attempts. Error:`, errorMsg);
           
-          // Check if it's still a block range error, try smaller chunks
-          if (error.message?.includes('block range') && MAX_BLOCK_RANGE > 100) {
-            console.log(`🔄 Retrying chunk ${i + 1} with smaller range...`);
-            const smallerChunkSize = Math.floor(MAX_BLOCK_RANGE / 2);
-            const subChunks = Math.ceil(Number(chunkToBlock - chunkFromBlock + 1n) / smallerChunkSize);
+          // Try to recover with smaller sub-chunks for block range errors
+          if (errorMsg.includes('block range') || errorMsg.includes('query returned more than')) {
+            console.log(`🔄 Attempting recovery with smaller sub-chunks for chunk ${i + 1}...`);
+            const smallerChunkSize = Math.max(50, Math.floor(chunkSize / 4)); // Use 1/4 size or minimum 50
+            const subChunks = Math.ceil(chunkSize / smallerChunkSize);
+            
+            console.log(`📦 Breaking chunk ${i + 1} into ${subChunks} sub-chunks of ~${smallerChunkSize} blocks each`);
             
             for (let j = 0; j < subChunks; j++) {
               const subFromBlock = chunkFromBlock + BigInt(j * smallerChunkSize);
               const subToBlock = j === subChunks - 1 
-                ? chunkToBlock 
+                ? actualChunkToBlock 
                 : chunkFromBlock + BigInt((j + 1) * smallerChunkSize - 1);
               
               try {
+                console.log(`🔍 Sub-chunk ${j + 1}/${subChunks}: ${subFromBlock.toString()} to ${subToBlock.toString()}`);
                 const subChunkLogs = await publicClient.getLogs({
                   address: contractAddress,
                   event: eventAbi,
@@ -104,42 +157,70 @@ const fetchLogsWithChunking = async (publicClient, contractAddress, fromBlock, t
                   toBlock: subToBlock,
                 });
                 chunkLogs.push(...subChunkLogs);
+                console.log(`✅ Sub-chunk ${j + 1} completed: ${subChunkLogs.length} logs`);
+                
+                // Small delay between sub-chunks
+                if (j < subChunks - 1) {
+                  await sleep(50);
+                }
               } catch (subError) {
-                console.error(`❌ Sub-chunk failed: ${subFromBlock} to ${subToBlock}`, subError.message);
-                // Continue with other sub-chunks
+                console.error(`❌ Sub-chunk ${j + 1} failed: ${subFromBlock.toString()} to ${subToBlock.toString()}`, subError.message || subError.toString());
+                // Continue with other sub-chunks rather than failing completely
               }
+            }
+            
+            if (chunkLogs.length > 0) {
+              console.log(`🎯 Recovery successful for chunk ${i + 1}: ${chunkLogs.length} logs retrieved via sub-chunking`);
+              chunkSuccess = true;
             }
             break;
           } else {
-            throw error; // Re-throw if not retryable or max attempts reached
+            // For non-recoverable errors, log and continue with other chunks
+            console.error(`💥 Non-recoverable error in chunk ${i + 1}:`, errorMsg);
+            failedChunks++;
+            break;
           }
         }
         
         // Exponential backoff with jitter
         if (isRetryableError(error)) {
           const delay = RETRY_DELAY * Math.pow(2, attempt - 1) + Math.random() * 1000;
-          console.log(`⏳ Waiting ${Math.round(delay)}ms before retry...`);
+          console.log(`⏳ Waiting ${Math.round(delay)}ms before retry attempt ${attempt + 1}...`);
           await sleep(delay);
         } else {
-          throw error; // Don't retry non-retryable errors
+          console.error(`🚫 Non-retryable error in chunk ${i + 1}:`, errorMsg);
+          failedChunks++;
+          break;
         }
       }
     }
+    
+    // Only add logs if chunk was successful
+    if (chunkSuccess) {
+      allLogs.push(...chunkLogs);
+      processedChunks++;
+    }
 
-    allLogs.push(...chunkLogs);
-    processedChunks++;
-    
     // Progress logging
-    const progress = Math.round((processedChunks / chunks) * 100);
-    console.log(`📈 Progress: ${progress}% (${processedChunks}/${chunks} chunks, ${allLogs.length} total logs)`);
+    const completedChunks = i + 1;
+    const progress = Math.round((completedChunks / chunks) * 100);
+    console.log(`📈 Progress: ${progress}% (${completedChunks}/${chunks} chunks processed, ${processedChunks} successful, ${failedChunks} failed, ${allLogs.length} total logs)`);
     
-    // Rate limiting: small delay between chunks to be respectful to the RPC
+    // Rate limiting: delay between chunks to be respectful to the RPC
     if (i < chunks - 1) {
-      await sleep(100); // 100ms delay between chunks
+      await sleep(CHUNK_DELAY);
     }
   }
 
+  // Final summary
+  const successRate = chunks > 0 ? Math.round((processedChunks / chunks) * 100) : 0;
   console.log(`🎉 Log fetching completed: ${allLogs.length} total logs retrieved`);
+  console.log(`📊 Success rate: ${successRate}% (${processedChunks}/${chunks} chunks successful)`);
+  
+  if (failedChunks > 0) {
+    console.warn(`⚠️ Warning: ${failedChunks} chunks failed. Some logs may be missing.`);
+  }
+  
   return allLogs;
 };
 
@@ -152,26 +233,65 @@ export function useTradeEvents(contractAddress) {
       console.log(`🚀 Starting log fetch for contract: ${contractAddress}`);
       
       const blockNumber = await getBlockNumber(config);
-      const fromBlock = blockNumber - 50000n; // Starting block
+      const fromBlock = blockNumber - 10000n; // Reduced range for better reliability
       const toBlock = blockNumber; // Current block
       
-      console.log(`📋 Block range: ${fromBlock} to ${toBlock} (${Number(toBlock - fromBlock)} blocks)`);
+      const totalBlocks = Number(toBlock - fromBlock);
+      console.log(`📋 Block range: ${fromBlock.toString()} to ${toBlock.toString()} (${totalBlocks} blocks)`);
+      
+      // Input validation
+      if (totalBlocks <= 0) {
+        console.warn('⚠️ Invalid block range detected, returning empty results');
+        return [];
+      }
+      
+      if (totalBlocks > 100000) {
+        console.warn(`⚠️ Very large block range detected (${totalBlocks} blocks). This may take a while...`);
+      }
       
       // Check if range exceeds limit
-      const blockRange = Number(toBlock - fromBlock);
       let logs;
       
-      if (blockRange > MAX_BLOCK_RANGE) {
+      if (totalBlocks > MAX_BLOCK_RANGE) {
         console.log(`⚡ Large range detected, using chunked fetching...`);
         logs = await fetchLogsWithChunking(publicClient, contractAddress, fromBlock, toBlock, tradeEventAbi);
       } else {
         console.log(`✨ Small range, using direct fetch...`);
-        logs = await publicClient.getLogs({
-          address: contractAddress,
-          event: tradeEventAbi,
-          fromBlock: fromBlock,
-          toBlock: toBlock,
-        });
+        
+        // Even for small ranges, add retry logic
+        let attempt = 0;
+        while (attempt < RETRY_ATTEMPTS) {
+          try {
+            logs = await publicClient.getLogs({
+              address: contractAddress,
+              event: tradeEventAbi,
+              fromBlock: fromBlock,
+              toBlock: toBlock,
+            });
+            break;
+          } catch (error) {
+            attempt++;
+            console.warn(`⚠️ Direct fetch attempt ${attempt}/${RETRY_ATTEMPTS} failed:`, error.message);
+            
+            if (attempt >= RETRY_ATTEMPTS) {
+              throw error;
+            }
+            
+            if (isRetryableError(error)) {
+              const delay = RETRY_DELAY * Math.pow(2, attempt - 1) + Math.random() * 500;
+              console.log(`⏳ Waiting ${Math.round(delay)}ms before retry...`);
+              await sleep(delay);
+            } else {
+              throw error;
+            }
+          }
+        }
+      }
+
+      // Validate logs array
+      if (!Array.isArray(logs)) {
+        console.error('❌ Invalid logs response: expected array, got:', typeof logs);
+        return [];
       }
 
       // Transform logs to the expected format
@@ -195,11 +315,13 @@ export function useTradeEvents(contractAddress) {
       
       // Provide user-friendly error messages
       if (error.message?.includes('block range')) {
-        throw new Error('Block range too large. Please try a smaller date range.');
+        throw new Error('Block range issue detected. The system attempted automatic recovery, but some data may be incomplete.');
       } else if (error.message?.includes('rate limit')) {
         throw new Error('Rate limit exceeded. Please wait a moment and try again.');
       } else if (error.message?.includes('network') || error.message?.includes('connection')) {
         throw new Error('Network connection issue. Please check your internet and try again.');
+      } else if (error.message?.includes('Invalid block range')) {
+        throw new Error('Invalid block range parameters. Please refresh the page and try again.');
       } else {
         throw new Error(`Failed to fetch trade events: ${error.message}`);
       }
