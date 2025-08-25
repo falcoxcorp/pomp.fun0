@@ -11,7 +11,6 @@ import { config } from '../../wagmiClient';
 import { Line } from 'react-chartjs-2';
 import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale } from 'chart.js';
 import BuySell from '../../components/BuySell/BuySell';
-import TradingChartV3 from '../../components/Chart/TradingChartV3';
 import { useEffect } from 'react';
 import Video from '../../components/Video/Video';
 import TokenInfo from '../../components/TokenInfo/TokenInfo';
@@ -88,8 +87,8 @@ const CardPage = () => {
   const baseReserve = Number(data[0].result.virtualBaseReserve) / (10 ** 18);
   const quoteReserve = Number(data[0].result.virtualQuoteReserve) / (10 ** 18);
   const maxSupply = Number(data[0].result.maxListingBaseAmount) / (10 ** 18);
-  const currentPrice = quoteReserve / baseReserve;
 
+console.log({poolDetailsParsed})
   const prices = [];
   const supplies = [];
 
@@ -143,6 +142,8 @@ const CardPage = () => {
       },
     },
   };
+
+
 
   return (
     <>
@@ -201,21 +202,18 @@ const CardPage = () => {
 
                 <BuySell data={data[0].result} token={token} tokenBalance={tokenBalance} reserve={data[1].result} />
               </div>
-              <div className='chartbox'>
-                <TradingChartV3 
-                  prices={prices}
-                  supplies={supplies}
-                  maxSupply={maxSupply}
-                  currentPrice={currentPrice}
-                  symbol={poolDetailsParsed.symbol || 'TOKEN'}
-                  nativeCurrency={chain?.nativeCurrency?.symbol || 'ETH'}
-                />
+              <div className='chartbox' style={{ width: '100%' }}>
+                <Line data={chartData} options={options} />
               </div>
+
             </div>
 
           </div>
         </div>
       </div>
+
+
+
     </>
   );
 };
