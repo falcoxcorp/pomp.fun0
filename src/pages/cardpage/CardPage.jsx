@@ -12,7 +12,6 @@ import { Line } from 'react-chartjs-2';
 import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale } from 'chart.js';
 import BuySell from '../../components/BuySell/BuySell';
 import TradingChartV3 from '../../components/Chart/TradingChartV3';
-import CandlestickChartV3 from '../../components/Chart/CandlestickChartV3';
 import { useEffect } from 'react';
 import Video from '../../components/Video/Video';
 import TokenInfo from '../../components/TokenInfo/TokenInfo';
@@ -184,16 +183,7 @@ const CardPage = () => {
 
               </div>
 
-              <div className='boxc'>
-                <CandlestickChartV3 
-                  prices={prices}
-                  supplies={supplies}
-                  maxSupply={maxSupply}
-                  currentPrice={currentPrice}
-                  symbol={poolDetailsParsed.symbol || 'TOKEN'}
-                  nativeCurrency={chain?.nativeCurrency?.symbol || 'ETH'}
-                />
-              </div>
+              {poolDetailsParsed.video.length >0 && <Video link={poolDetailsParsed.video} />}
 
               <div className='boxc AllTransactions'>
                 <TradeEventList contractAddress={token} />
