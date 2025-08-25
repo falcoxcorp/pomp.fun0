@@ -12,7 +12,6 @@ import { Line } from 'react-chartjs-2';
 import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale } from 'chart.js';
 import BuySell from '../../components/BuySell/BuySell';
 import { useEffect } from 'react';
-import Video from '../../components/Video/Video';
 import TokenInfo from '../../components/TokenInfo/TokenInfo';
 const CardPage = () => {
   const { token } = useParams();
@@ -184,7 +183,10 @@ console.log({poolDetailsParsed})
 
               </div>
 
-              {poolDetailsParsed.video.length >0 && <Video link={poolDetailsParsed.video} />}
+              <div className='boxc chartbox' style={{ width: '100%' }}>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Bonding Curve</h3>
+                <Line data={chartData} options={options} />
+              </div>
 
               <div className='boxc AllTransactions'>
                 <TradeEventList contractAddress={token} />
@@ -201,9 +203,6 @@ console.log({poolDetailsParsed})
                 <p>When the market cap hits <span className='text-yellow-100'>${(parseInt(data[1].result.maxListingQuoteAmount) * 10000000 * priceInDollar['1868'] / parseInt(data[1].result.maxListingBaseAmount)).toString()}</span>, All liquidity from the bonding curve will be deposited into Pancake Swap and burned. The progression accelerates as the price rises</p>
 
                 <BuySell data={data[0].result} token={token} tokenBalance={tokenBalance} reserve={data[1].result} />
-              </div>
-              <div className='chartbox' style={{ width: '100%' }}>
-                <Line data={chartData} options={options} />
               </div>
 
             </div>
