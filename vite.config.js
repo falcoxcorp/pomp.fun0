@@ -7,5 +7,8 @@ export default defineConfig({
   server: {
     host: true,  // Allow access from any network
     port: 5173,        // Port where the app is running
+    headers: {
+      'Cross-Origin-Opener-Policy': 'unsafe-none'
+    }
   },
 })
