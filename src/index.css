@@ -271,13 +271,485 @@ header button svg{ color:#fff !important;}
 header{ background:#282828 !important;    border-bottom: 1px solid #343434;}
 
 .forminbox{ background:#1a1a1a; padding: 30px !important; border-radius:20px;border: 1px solid #505050;}
+
+/* ===== MEJORAS VISUALES PARA CREATE TOKEN ===== */
+
+/* Contenedor principal del formulario */
+.successfullytoken.formmain.mainbox {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.successfullytoken.formmain.mainbox::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(193, 164, 68, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(193, 164, 68, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* Formulario principal */
+.tokenform {
+    position: relative;
+    z-index: 2;
+}
+
+/* Contenedor del formulario mejorado */
 .tags-selection button:hover{ background:#fff; color:#000;}
+
+.tags-selection {
+    gap: 12px !important;
+}
+
+.tags-selection button {
+    border: 2px solid rgba(193, 164, 68, 0.3) !important;
+    background: linear-gradient(145deg, #2c2c2c 0%, #3a3a3a 100%) !important;
+    color: #ffffff !important;
+    padding: 12px 20px !important;
+    border-radius: 25px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.tags-selection button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.tags-selection button:hover::before {
+    left: 100%;
+}
+
+.tags-selection button:hover {
+    background: linear-gradient(135deg, #c1a444 0%, #f4d03f 100%) !important;
+    color: #000000 !important;
+    border-color: #c1a444 !important;
+    transform: translateY(-2px) scale(1.05) !important;
+    box-shadow: 
+        0 8px 25px rgba(193, 164, 68, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.tags-selection .text-white {
+    background: linear-gradient(135deg, #c1a444 0%, #f4d03f 100%) !important;
+    border-color: #c1a444 !important;
+    color: #000000 !important;
+    box-shadow: 
+        0 6px 20px rgba(193, 164, 68, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Botón de crear token mejorado */
+.createtokenbtn {
+    background: linear-gradient(135deg, #c1a444 0%, #f4d03f 100%) !important;
+    color: #000000 !important;
+    padding: 16px 32px !important;
+    border-radius: 25px !important;
+    font-weight: 700 !important;
+    font-size: 18px !important;
+    border: none !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 
+        0 8px 25px rgba(193, 164, 68, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.createtokenbtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.createtokenbtn:hover::before {
+    left: 100%;
+}
+
+.createtokenbtn:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 
+        0 12px 35px rgba(193, 164, 68, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.createtokenbtn:active {
+    transform: translateY(-1px) scale(0.98) !important;
+}
+
+.createtokenbtn:disabled {
+    opacity: 0.7 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+/* Botón de opciones extra */
+.text-gold {
+    color: #c1a444 !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    padding: 12px 24px !important;
+    border-radius: 20px !important;
+    background: rgba(193, 164, 68, 0.1) !important;
+    border: 1px solid rgba(193, 164, 68, 0.3) !important;
+    transition: all 0.3s ease !important;
+    display: inline-block !important;
+}
+
+.text-gold:hover {
+    background: rgba(193, 164, 68, 0.2) !important;
+    border-color: #c1a444 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(193, 164, 68, 0.2) !important;
+}
+
+/* Sección de éxito mejorada */
+.successbox {
+    background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+    padding: 60px 40px !important;
+    border: 2px solid rgba(193, 164, 68, 0.4) !important;
+    border-radius: 25px !important;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 8px 25px rgba(193, 164, 68, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.successbox::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(193, 164, 68, 0.1) 50%, transparent 70%);
+    opacity: 0.5;
+    pointer-events: none;
+    border-radius: 25px;
+}
+
+.successbox h3 {
+    font-size: 32px !important;
+    margin-bottom: 30px !important;
+    background: linear-gradient(135deg, #c1a444 0%, #f4d03f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 8px rgba(193, 164, 68, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+.successbox p {
+    color: #ffffff !important;
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    position: relative;
+    z-index: 2;
+}
+
+.successbox a {
+    color: #c1a444 !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid rgba(193, 164, 68, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.successbox a:hover {
+    color: #f4d03f !important;
+    border-bottom-color: #f4d03f !important;
+}
+
+.successbox button {
+    background: linear-gradient(135deg, #c1a444 0%, #f4d03f 100%) !important;
+    color: #000000 !important;
+    padding: 14px 28px !important;
+    border-radius: 25px !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    border: none !important;
+    margin-top: 20px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 
+        0 6px 20px rgba(193, 164, 68, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    position: relative;
+    z-index: 2;
+}
+
+.successbox button:hover {
+    transform: translateY(-2px) scale(1.05) !important;
+    box-shadow: 
+        0 10px 30px rgba(193, 164, 68, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Responsive mejorado */
+@media (max-width: 768px) {
+    .forminbox {
+        padding: 30px 20px !important;
+        border-radius: 20px !important;
+    }
+    
+    .forminbox input,
+    .forminbox textarea,
+    .forminbox select {
+        padding: 14px 16px !important;
+        font-size: 15px !important;
+    }
+    
+    .tags-selection {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+    
+    .tags-selection button {
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+    }
+    
+    .createtokenbtn {
+        padding: 14px 24px !important;
+        font-size: 16px !important;
+    }
+    
+    .successbox {
+        padding: 40px 20px !important;
+    }
+    
+    .successbox h3 {
+        font-size: 24px !important;
+    }
+}
+
+/* Animaciones adicionales */
+@keyframes formGlow {
+    0%, 100% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 8px 25px rgba(193, 164, 68, 0.1); }
+    50% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 8px 25px rgba(193, 164, 68, 0.2); }
+}
+
+.forminbox {
+    animation: formGlow 4s ease-in-out infinite;
+}
+
+/* Estados de error mejorados */
+.forminbox input:invalid:not(:placeholder-shown) {
+    border-color: #ff6b6b !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 0 0 3px rgba(255, 107, 107, 0.2) !important;
+}
+
+.forminbox textarea:invalid:not(:placeholder-shown) {
+    border-color: #ff6b6b !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 0 0 3px rgba(255, 107, 107, 0.2) !important;
+}
+
+/* Asterisco requerido mejorado */
+.text-red-500 {
+    color: #ff6b6b !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 2px rgba(255, 107, 107, 0.3) !important;
+}
 .forminbox .text-lg {font-size: 16px; line-height: 0px;}
 .tokenform{padding-top:70px !important;padding-bottom: 70px !important;}
 
+
+.forminbox {
+    background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+    padding: 40px !important;
+    border-radius: 25px !important;
+    border: 2px solid rgba(193, 164, 68, 0.3) !important;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 8px 25px rgba(193, 164, 68, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.forminbox::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(193, 164, 68, 0.05) 50%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: 25px;
+}
+
+.forminbox:hover::before {
+    opacity: 1;
+}
+
+/* Labels mejorados */
+.forminbox .text-lg {
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    margin-bottom: 8px !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.forminbox .text-lg::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #c1a444, #f4d03f);
+    border-radius: 2px;
+}
+
+/* Inputs mejorados */
 .forminbox input {padding: 10px; margin-bottom: 16px; border: 1px solid #3e3e3e !important; background: #2c2c2c !important;margin-top: 2px;}
+
+.forminbox input {
+    padding: 16px 20px !important;
+    margin-bottom: 20px !important;
+    border: 2px solid rgba(193, 164, 68, 0.3) !important;
+    background: linear-gradient(145deg, #2c2c2c 0%, #3a3a3a 100%) !important;
+    margin-top: 8px !important;
+    border-radius: 12px !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.forminbox input:focus {
+    outline: none !important;
+    border-color: #c1a444 !important;
+    background: linear-gradient(145deg, #3a3a3a 0%, #4a4a4a 100%) !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 0 0 3px rgba(193, 164, 68, 0.2),
+        0 4px 12px rgba(193, 164, 68, 0.15) !important;
+    transform: translateY(-1px) !important;
+}
+
+.forminbox input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-weight: 400 !important;
+}
+
+/* Textareas mejorados */
 .forminbox textarea{padding: 10px;    margin-bottom: 16px;    border: 1px solid #3e3e3e !important; background: #2c2c2c !important;    margin-top: 2px;}
+
+.forminbox textarea {
+    padding: 16px 20px !important;
+    margin-bottom: 20px !important;
+    border: 2px solid rgba(193, 164, 68, 0.3) !important;
+    background: linear-gradient(145deg, #2c2c2c 0%, #3a3a3a 100%) !important;
+    margin-top: 8px !important;
+    border-radius: 12px !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    resize: vertical !important;
+    min-height: 120px !important;
+}
+
+.forminbox textarea:focus {
+    outline: none !important;
+    border-color: #c1a444 !important;
+    background: linear-gradient(145deg, #3a3a3a 0%, #4a4a4a 100%) !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 0 0 3px rgba(193, 164, 68, 0.2),
+        0 4px 12px rgba(193, 164, 68, 0.15) !important;
+    transform: translateY(-1px) !important;
+}
+
+.forminbox textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-weight: 400 !important;
+}
+
+/* Selects mejorados */
 .forminbox select{padding: 10px;    margin-bottom: 16px;    border: 1px solid #3e3e3e !important; background: #2c2c2c !important;    margin-top: 2px;}
+
+.forminbox select {
+    padding: 16px 20px !important;
+    margin-bottom: 20px !important;
+    border: 2px solid rgba(193, 164, 68, 0.3) !important;
+    background: linear-gradient(145deg, #2c2c2c 0%, #3a3a3a 100%) !important;
+    margin-top: 8px !important;
+    border-radius: 12px !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    cursor: pointer !important;
+}
+
+.forminbox select:focus {
+    outline: none !important;
+    border-color: #c1a444 !important;
+    background: linear-gradient(145deg, #3a3a3a 0%, #4a4a4a 100%) !important;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 0 0 3px rgba(193, 164, 68, 0.2),
+        0 4px 12px rgba(193, 164, 68, 0.15) !important;
+    transform: translateY(-1px) !important;
+}
+
+.forminbox select option {
+    background: #2c2c2c !important;
+    color: #ffffff !important;
+    padding: 12px !important;
+}
+
+/* Botones de tags mejorados */
 .rightbox{background: #2e2e2e !important;}
 
 .forminbox textarea{border-color: #c5c5c5;background-color: #fff;}
