@@ -12,6 +12,7 @@ import { Line } from 'react-chartjs-2';
 import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale } from 'chart.js';
 import BuySell from '../../components/BuySell/BuySell';
 import TradingChartV3 from '../../components/Chart/TradingChartV3';
+import CandlestickChartV3 from '../../components/Chart/CandlestickChartV3';
 import { useEffect } from 'react';
 import Video from '../../components/Video/Video';
 import TokenInfo from '../../components/TokenInfo/TokenInfo';
