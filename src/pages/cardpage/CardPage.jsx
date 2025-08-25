@@ -157,7 +157,7 @@ const CardPage = () => {
               <div className="boxc bg-white p-6 rounded-lg">
 
                 <div className="progress">
-                  <div className="progress-bar" role="progressbar" style={{ width: `${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee) * 100)}%` }} aria-valuenow={`${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee) * 100)}`} aria-valuemin="0" aria-valuemax="100">{`${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee) * 100)}%`}</div>
+                  <div className="progress-bar" role="progressbar" style={{ width: `${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee)) ** 100}%` }} aria-valuenow={`${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee)) ** 100}`} aria-valuemin="0" aria-valuemax="100">{`${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee)) ** 100}%`}</div>
                 </div>
                 <p>When the market cap hits <span className='text-yellow-100'>${(parseInt(data[1].result.maxListingQuoteAmount) * 10000000 * priceInDollar['1868'] / parseInt(data[1].result.maxListingBaseAmount)).toString()}</span>, All liquidity from the bonding curve will be deposited into Pancake Swap and burned. The progression accelerates as the price rises</p>
 
@@ -169,6 +169,9 @@ const CardPage = () => {
           </div>
         </div>
       </div>
+
+
+
     </>
   );
 };
