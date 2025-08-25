@@ -20,7 +20,7 @@ const Navbar = () => {
         {/* Left side: Logo and Links (Board, Create Token) */}
         <div className="flex items-center gap-5">
           <NavLink to="/" className="w-8 sm:w-[200px]">
-            <h1>  <img src="./logo/logo.png" className="logo" alt="logo" /></h1>
+            <h1>  <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1756109492996-0df3b8b4e8a5cdaa2a70aba07bbc4c3e.png" className="logo" alt="logo" /></h1>
           </NavLink>
           <div className="flex space-x-6">
             <NavLink
