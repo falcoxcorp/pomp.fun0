@@ -1,5 +1,4 @@
 import React from 'react';
-import { formatUnits } from 'ethers';
 import { priceInDollar, routers } from '../../helper/Helper';
 
 const getRouter = (value, chain = '97') => {
@@ -18,7 +17,7 @@ const TokenInfo = ({ poolDetails, data }) => {
                 </strong> {poolDetails.description}</li>
                 <li><strong>Tag :</strong> <span>{poolDetails.Tag}</span></li>
                 <li><strong>Router :</strong> <span>{getRouter(data[0].result.router, 1868)}</span></li>
-                <li><strong>Market Cap :</strong><span>${(parseFloat(formatUnits(data[0].result.virtualQuoteReserve, 18)) * 10000000 * priceInDollar['1868'] / parseFloat(formatUnits(data[0].result.virtualBaseReserve, 18))).toFixed(2)}</span></li>
+                <li><strong>Market Cap :</strong><span>${(parseInt(data[0].result.virtualQuoteReserve) * 10000000 * priceInDollar['1868'] / parseInt(data[0].result.virtualBaseReserve)).toString()}</span></li>
                 <li>
                     <strong>Address :
                         <a
