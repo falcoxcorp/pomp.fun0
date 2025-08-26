@@ -12,6 +12,7 @@ import ProfessionalChart from '../../components/TradingChart/ProfessionalChart';
 import BuySell from '../../components/BuySell/BuySell';
 import { useEffect } from 'react';
 import TokenInfo from '../../components/TokenInfo/TokenInfo';
+
 const CardPage = () => {
   const { token } = useParams();
 
@@ -100,80 +101,70 @@ const CardPage = () => {
     marketCap: parseInt(data[0].result.virtualQuoteReserve) * 10000000 * priceInDollar['1868'] / parseInt(data[0].result.virtualBaseReserve)
   };
 
-
   return (
-    <>
-      <div className="slidersection">
-        <div className="container">
-          <div className='row'>
-            {/* leftbox */}
-            <div className='col-md-3'>
-              <div className='boxc'>
-                <span className="socialicon">
-                  {poolDetailsParsed.Website && <a href={poolDetailsParsed.Website} target='_blank'><i className="fa fa-globe"></i></a>}
-                  {poolDetailsParsed.Twitter && <a href={poolDetailsParsed.Twitter} target='_blank'><i className="fa fa-twitter"></i></a>}
-                  {poolDetailsParsed.Telegram && <a href={poolDetailsParsed.Telegram} target='_blank'><i className="fa fa-telegram"></i></a>}
-                </span>
-                <TokenInfo poolDetails={poolDetailsParsed} data={data} />
+    <div className="slidersection">
+      <div className="container">
+        <div className='row'>
+          {/* leftbox */}
+          <div className='col-md-3'>
+            <div className='boxc'>
+              <span className="socialicon">
+                {poolDetailsParsed.Website && <a href={poolDetailsParsed.Website} target='_blank'><i className="fa fa-globe"></i></a>}
+                {poolDetailsParsed.Twitter && <a href={poolDetailsParsed.Twitter} target='_blank'><i className="fa fa-twitter"></i></a>}
+                {poolDetailsParsed.Telegram && <a href={poolDetailsParsed.Telegram} target='_blank'><i className="fa fa-telegram"></i></a>}
+              </span>
+              <TokenInfo poolDetails={poolDetailsParsed} data={data} />
 
-                <hr className='separetar'></hr>
-                <div className='tokenomic'>
-                  <h3 className="text-xl font-semibold text-gray-800">Tokenomic</h3>
-                  <img className="h-50 rounded" src="/images/chart.png" alt="Token image" />
+              <hr className='separetar'></hr>
+              <div className='tokenomic'>
+                <h3 className="text-xl font-semibold text-gray-800">Tokenomic</h3>
+                <img className="h-50 rounded" src="/images/chart.png" alt="Token image" />
+              </div>
+            </div>
+          </div>
 
+          {/* centerbox */}
+          <div className='col-md-6'>
+            <div className='boxc tpllogo'>
+              <div className='row detaillogo'>
+                <div className='col-md-3'>
+                  <img className="h-50 rounded" src={poolDetailsParsed?.image} alt="Token image" />
+                </div>
+                <div className='col-md-9 lgs'>
+                  <h1 className='tokenname'>{poolDetailsParsed.name}</h1>
                 </div>
               </div>
             </div>
 
-            {/* centerbox */}
-            <div className='col-md-6'>
-              <div className='boxc tpllogo'>
-
-                <div className='row detaillogo'>
-                  <div className='col-md-3'>
-                    <img className="h-50 rounded" src={poolDetailsParsed?.image} alt="Token image" />
-                  </div>
-                  <div className='col-md-9 lgs'>
-                    <h1 className='tokenname'>{poolDetailsParsed.name}</h1>
-                  </div>
-                </div>
-
-              </div>
-
-                <ProfessionalChart 
-                  tokenData={tokenChartData}
-                  height={500}
-                  className="professional-bonding-curve"
-                />
-
-              <div className='boxc AllTransactions'>
-                <TradeEventList contractAddress={token} />
-              </div>
+            <div className='boxc' style={{ marginBottom: '20px' }}>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Bonding Curve</h3>
+              <ProfessionalChart 
+                tokenData={tokenChartData}
+                height={500}
+                className="professional-bonding-curve"
+              />
             </div>
 
-            {/* rightbox */}
-            <div className='col-md-3'>
-              <div className="boxc bg-white p-6 rounded-lg">
-
-                <div className="progress">
-                  <div className="progress-bar" role="progressbar" style={{ width: `${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee)) ** 100}%` }} aria-valuenow={`${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee)) ** 100}`} aria-valuemin="0" aria-valuemax="100">{`${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee)) ** 100}%`}</div>
-                </div>
-                <p>When the market cap hits <span className='text-yellow-100'>${(parseInt(data[1].result.maxListingQuoteAmount) * 10000000 * priceInDollar['1868'] / parseInt(data[1].result.maxListingBaseAmount)).toString()}</span>, All liquidity from the bonding curve will be deposited into Pancake Swap and burned. The progression accelerates as the price rises</p>
-
-                <BuySell data={data[0].result} token={token} tokenBalance={tokenBalance} reserve={data[1].result} />
-              </div>
-
+            <div className='boxc AllTransactions'>
+              <TradeEventList contractAddress={token} />
             </div>
+          </div>
 
+          {/* rightbox */}
+          <div className='col-md-3'>
+            <div className="boxc bg-white p-6 rounded-lg">
+              <div className="progress">
+                <div className="progress-bar" role="progressbar" style={{ width: `${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee)) * 100}%` }} aria-valuenow={`${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee)) * 100}`} aria-valuemin="0" aria-valuemax="100">{`${parseInt((data[0].result.virtualQuoteReserve - data[1].result.initialVirtualQuoteReserve) / (data[0].result.maxListingQuoteAmount + data[0].result.listingFee)) * 100}%`}</div>
+              </div>
+              <p>When the market cap hits <span className='text-yellow-100'>${(parseInt(data[1].result.maxListingQuoteAmount) * 10000000 * priceInDollar['1868'] / parseInt(data[1].result.maxListingBaseAmount)).toString()}</span>, All liquidity from the bonding curve will be deposited into Pancake Swap and burned. The progression accelerates as the price rises</p>
+
+              <BuySell data={data[0].result} token={token} tokenBalance={tokenBalance} reserve={data[1].result} />
+            </div>
           </div>
         </div>
       </div>
-
-
-
-    </>
+    </div>
   );
 };
-
 
 export default CardPage;
