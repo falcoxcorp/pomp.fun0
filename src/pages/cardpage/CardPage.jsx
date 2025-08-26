@@ -8,7 +8,8 @@ import { useAccount, useReadContract, useReadContracts } from 'wagmi';
 import logo from "../../assets/logo/logo.png";
 import TradeEventList from '../../components/Statistics/TradeEventList';
 import { config } from '../../wagmiClient';
-import ProfessionalChart from '../../components/TradingChart/ProfessionalChart';
+import TradingChart from '../../components/TradingChart/TradingChart';
+import '../../components/TradingChart/TradingChart.css';
 import BuySell from '../../components/BuySell/BuySell';
 import { useEffect } from 'react';
 import TokenInfo from '../../components/TokenInfo/TokenInfo';
@@ -140,10 +141,11 @@ const CardPage = () => {
 
               </div>
 
-                <ProfessionalChart 
+              <div className='boxc chartbox'>
+                <TradingChart 
                   tokenData={tokenChartData}
                   height={500}
-                  className="professional-bonding-curve"
+                  className="bonding-curve-chart"
                 />
               </div>
 
