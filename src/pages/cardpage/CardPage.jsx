@@ -145,7 +145,6 @@ const CardPage = () => {
                   height={500}
                   className="professional-bonding-curve"
                 />
-              </div>
 
               <div className='boxc AllTransactions'>
                 <TradeEventList contractAddress={token} />
